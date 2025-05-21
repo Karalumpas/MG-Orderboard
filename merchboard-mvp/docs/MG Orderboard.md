@@ -1,3 +1,7 @@
-# MG Orderboard
+# Projektoplæg flyttet
 
-Project documentation and notes.
+Dette projektoplæg er nu flyttet til filen:
+
+**docs/Projektoplaeg.md**
+
+Opdater evt. links og referencer.

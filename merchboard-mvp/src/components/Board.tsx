@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import useBoardStore from '../store/board';
 import ReactFlow, { MiniMap, Controls, Background, applyNodeChanges, applyEdgeChanges, addEdge, NodeChange, EdgeChange, Connection } from 'react-flow-renderer';
+import ProductNode from './ProductNode';
 
 const Board: React.FC = () => {
   const { nodes, edges, setNodes, setEdges } = useBoardStore();
@@ -16,6 +17,8 @@ const Board: React.FC = () => {
 
   const onConnect = (params: Connection) => setEdges(addEdge(params, edges));
 
+  const nodeTypes = { productNode: ProductNode };
+
   // Pan & zoom is handled by React Flow, so no need for manual wheel event
 
   return (
@@ -27,6 +30,7 @@ const Board: React.FC = () => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        nodeTypes={nodeTypes}
       >
         <MiniMap />
         <Controls />

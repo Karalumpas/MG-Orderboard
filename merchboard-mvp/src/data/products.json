@@ -1,42 +1,52 @@
 [
   {
-    "id": 1,
+    "id": "1",
     "name": "Sport T-Shirt",
     "price": 19.99,
     "image": "https://example.com/images/sport-tshirt.jpg",
     "category": "T-Shirts",
-    "color": "Red"
+    "color": "Red",
+    "sizes": ["S", "M", "L", "XL"],
+    "customizations": { "embroidery": true, "print": true }
   },
   {
-    "id": 2,
+    "id": "2",
     "name": "Running Shorts",
     "price": 29.99,
     "image": "https://example.com/images/running-shorts.jpg",
     "category": "Shorts",
-    "color": "Black"
+    "color": "Black",
+    "sizes": ["S", "M", "L", "XL"],
+    "customizations": { "embroidery": false, "print": true }
   },
   {
-    "id": 3,
+    "id": "3",
     "name": "Basketball Jersey",
     "price": 34.99,
     "image": "https://example.com/images/basketball-jersey.jpg",
     "category": "Jerseys",
-    "color": "Blue"
+    "color": "Blue",
+    "sizes": ["M", "L", "XL"],
+    "customizations": { "embroidery": true, "print": true }
   },
   {
-    "id": 4,
+    "id": "4",
     "name": "Yoga Pants",
     "price": 39.99,
     "image": "https://example.com/images/yoga-pants.jpg",
     "category": "Pants",
-    "color": "Gray"
+    "color": "Gray",
+    "sizes": ["S", "M", "L"],
+    "customizations": { "embroidery": false, "print": false }
   },
   {
-    "id": 5,
+    "id": "5",
     "name": "Sports Cap",
     "price": 14.99,
     "image": "https://example.com/images/sports-cap.jpg",
     "category": "Accessories",
-    "color": "White"
+    "color": "White",
+    "sizes": ["One Size"],
+    "customizations": { "embroidery": true, "print": false }
   }
 ]

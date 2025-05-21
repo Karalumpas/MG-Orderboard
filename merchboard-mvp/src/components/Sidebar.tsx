@@ -6,12 +6,16 @@ const Sidebar: React.FC<{ onAddProduct: (product: Product) => void }> = ({ onAdd
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
     const [colorFilter, setColorFilter] = useState('');
+    const [categories, setCategories] = useState<string[]>([]);
+    const [colors, setColors] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
             const response = await fetch('/data/products.json');
             const data = await response.json();
             setProducts(data);
+            setCategories([...new Set((data as Product[]).map((p) => String(p.category)))]);
+            setColors([...new Set((data as Product[]).map((p) => String(p.color)))]);
         };
         fetchProducts();
     }, []);
@@ -32,13 +36,17 @@ const Sidebar: React.FC<{ onAddProduct: (product: Product) => void }> = ({ onAdd
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
             />
-            <select onChange={(e) => setCategoryFilter(e.target.value)} className="filter-select">
+            <select onChange={(e) => setCategoryFilter(e.target.value)} className="filter-select" value={categoryFilter}>
                 <option value="">All Categories</option>
-                {/* Add category options here */}
+                {categories.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                ))}
             </select>
-            <select onChange={(e) => setColorFilter(e.target.value)} className="filter-select">
+            <select onChange={(e) => setColorFilter(e.target.value)} className="filter-select" value={colorFilter}>
                 <option value="">All Colors</option>
-                {/* Add color options here */}
+                {colors.map((color) => (
+                    <option key={color} value={color}>{color}</option>
+                ))}
             </select>
             <ul className="product-list">
                 {filteredProducts.map(product => (
