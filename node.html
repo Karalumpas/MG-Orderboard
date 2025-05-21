@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <title>Visual Ordrebygger</title>
+  <style>
+    body { background: #1a202c; margin: 0; }
+    #canvas { width: 100vw; height: 100vh; position: relative; }
+    .node {
+      position: absolute;
+      width: 180px; height: 70px;
+      background: #3182ce; color: #fff; border-radius: 12px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      cursor: move; user-select: none; font-family: sans-serif; padding: 8px;
+      border: 2px solid transparent; font-size: 15px;
+    }
+    .node.selected { border: 2px solid #ecc94b; }
+    svg { position: absolute; top: 0; left: 0; pointer-events: none; }
+    #orderBtn { position: absolute; top: 10px; left: 10px; z-index: 10; padding: 10px 20px; font-size: 16px; background: #ecc94b; border: none; border-radius: 8px; cursor: pointer;}
+  </style>
+</head>
+<body>
+<div id="canvas">
+  <button id="orderBtn">Opret Ordre</button>
+  <svg id="lines"></svg>
+</div>
+<script>
+  // Simulerede webshop-produkter
+  const products = [
+    {id: 1, name: "T-shirt", price: 199},
+    {id: 2, name: "Krus", price: 89},
+    {id: 3, name: "Juletræspynt", price: 59}
+  ];
+
+  const canvas = document.getElementById('canvas');
+  const lines = document.getElementById('lines');
+  let connections = [];
+  let selected = null;
+  let dragging = null, offset = {x:0, y:0};
+
+  // Opret noder for hvert produkt
+  products.forEach((p,i) => {
+    const node = document.createElement('div');
+    node.className = 'node';
+    node.style.left = (100 + i*220) + 'px';
+    node.style.top = (120 + i*70) + 'px';
+    node.innerHTML = `<b>${p.name}</b><div>Pris: ${p.price} kr.</div>`;
+    node.dataset.id = p.id;
+    canvas.appendChild(node);
+
+    // Dragging
+    node.addEventListener('mousedown', (e) => {
+      dragging = node;
+      offset.x = e.offsetX;
+      offset.y = e.offsetY;
+      node.style.zIndex = 1000;
+    });
+    node.addEventListener('mouseup', () => {
+      dragging = null;
+      node.style.zIndex = 1;
+    });
+    node.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      if (!selected) {
+        selected = node;
+      } else if (selected !== node) {
+        // Connect nodes (produkter)
+        if (!connections.some(([a, b]) =>
+          (a === selected && b === node) || (a === node && b === selected)
+        )) {
+          connections.push([selected, node]);
+        }
+        selected.classList.remove('selected');
+        node.classList.remove('selected');
+        selected = null;
+        drawLines();
+      }
+    });
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (dragging) {
+      dragging.style.left = (e.clientX - offset.x) + 'px';
+      dragging.style.top = (e.clientY - offset.y) + 'px';
+      drawLines();
+    }
+  });
+
+  document.body.addEventListener('mouseup', () => {
+    if (dragging) dragging.style.zIndex = 1;
+    dragging = null;
+  });
+
+  function drawLines() {
+    lines.innerHTML = '';
+    connections.forEach(([a, b]) => {
+      const r1 = a.getBoundingClientRect();
+      const r2 = b.getBoundingClientRect();
+      const p1 = [r1.left + r1.width/2 - canvas.offsetLeft, r1.top + r1.height/2 - canvas.offsetTop];
+      const p2 = [r2.left + r2.width/2 - canvas.offsetLeft, r2.top + r2.height/2 - canvas.offsetTop];
+      lines.innerHTML += `<line x1="${p1[0]}" y1="${p1[1]}" x2="${p2[0]}" y2="${p2[1]}" stroke="#ecc94b" stroke-width="4" />`;
+    });
+  }
+  drawLines();
+
+  // "Opret Ordre"-knap
+  document.getElementById('orderBtn').addEventListener('click', () => {
+    // Find alle forbundne produkter (unikke id'er)
+    let ids = new Set();
+    connections.forEach(([a, b]) => {
+      ids.add(a.dataset.id); ids.add(b.dataset.id);
+    });
+    if (ids.size === 0) {
+      alert("Forbind mindst to produkter for at oprette en ordre!");
+      return;
+    }
+    let valgteProdukter = products.filter(p => ids.has(p.id.toString()));
+    let samletPris = valgteProdukter.reduce((sum, p) => sum + p.price, 0);
+    alert(
+      "Ordre oprettet med disse produkter:\n\n" +
+      valgteProdukter.map(p => `${p.name} (${p.price} kr.)`).join('\n') +
+      `\n\nSamlet pris: ${samletPris} kr.`
+    );
+    // Her ville du i praksis sende data til backend / WooCommerce API!
+  });
+</script>
+</body>
+</html>
