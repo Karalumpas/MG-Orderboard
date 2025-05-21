@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Sport T-Shirt",
+    "price": 19.99,
+    "image": "https://example.com/images/sport-tshirt.jpg",
+    "category": "T-Shirts",
+    "color": "Red"
+  },
+  {
+    "id": 2,
+    "name": "Running Shorts",
+    "price": 29.99,
+    "image": "https://example.com/images/running-shorts.jpg",
+    "category": "Shorts",
+    "color": "Black"
+  },
+  {
+    "id": 3,
+    "name": "Basketball Jersey",
+    "price": 34.99,
+    "image": "https://example.com/images/basketball-jersey.jpg",
+    "category": "Jerseys",
+    "color": "Blue"
+  },
+  {
+    "id": 4,
+    "name": "Yoga Pants",
+    "price": 39.99,
+    "image": "https://example.com/images/yoga-pants.jpg",
+    "category": "Pants",
+    "color": "Gray"
+  },
+  {
+    "id": 5,
+    "name": "Sports Cap",
+    "price": 14.99,
+    "image": "https://example.com/images/sports-cap.jpg",
+    "category": "Accessories",
+    "color": "White"
+  }
+]
