@@ -1,12 +1,10 @@
 import React from 'react';
-import { useStore } from '../store/board';
+import useBoardStore from '../store/board';
 
 const SummaryBar: React.FC = () => {
-    const { totalItems, totalPrice, downloadCart } = useStore(state => ({
-        totalItems: state.totalItems,
-        totalPrice: state.totalPrice,
-        downloadCart: state.downloadCart,
-    }));
+    const totalItems = useBoardStore((state) => state.totalItems);
+    const totalPrice = useBoardStore((state) => state.totalPrice);
+    const downloadCart = useBoardStore((state) => state.downloadCart);
 
     return (
         <div className="flex justify-between items-center p-4 bg-gray-200">

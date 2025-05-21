@@ -1,36 +1,22 @@
 import React, { useEffect, useRef } from 'react';
-import { useStore } from '../store/board';
-import ReactFlow, { MiniMap, Controls, Background } from 'react-flow-renderer';
+import useBoardStore from '../store/board';
+import ReactFlow, { MiniMap, Controls, Background, applyNodeChanges, applyEdgeChanges, addEdge, NodeChange, EdgeChange, Connection } from 'react-flow-renderer';
 
 const Board: React.FC = () => {
-  const { nodes, edges, setNodes, setEdges } = useStore();
+  const { nodes, edges, setNodes, setEdges } = useBoardStore();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
-  const onNodesChange = (changes: any) => {
-    setNodes((nds) => applyNodeChanges(changes, nds));
+  const onNodesChange = (changes: NodeChange[]) => {
+    setNodes(applyNodeChanges(changes, nodes));
   };
 
-  const onEdgesChange = (changes: any) => {
-    setEdges((eds) => applyEdgeChanges(changes, eds));
+  const onEdgesChange = (changes: EdgeChange[]) => {
+    setEdges(applyEdgeChanges(changes, edges));
   };
 
-  const onConnect = (params: any) => setEdges((eds) => addEdge(params, eds));
+  const onConnect = (params: Connection) => setEdges(addEdge(params, edges));
 
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
-      const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1;
-      const newZoom = reactFlowWrapper.current?.zoom * zoomFactor;
-      reactFlowWrapper.current?.setZoom(newZoom);
-    };
-
-    const wrapper = reactFlowWrapper.current;
-    wrapper?.addEventListener('wheel', handleWheel);
-
-    return () => {
-      wrapper?.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
+  // Pan & zoom is handled by React Flow, so no need for manual wheel event
 
   return (
     <div className="h-full" ref={reactFlowWrapper}>
